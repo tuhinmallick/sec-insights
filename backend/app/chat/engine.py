@@ -230,13 +230,12 @@ def get_tool_service_context(
         chunk_overlap=NODE_PARSER_CHUNK_OVERLAP,
         callback_manager=callback_manager,
     )
-    service_context = ServiceContext.from_defaults(
+    return ServiceContext.from_defaults(
         callback_manager=callback_manager,
         llm=llm,
         embed_model=embedding_model,
         node_parser=node_parser,
     )
-    return service_context
 
 
 async def get_chat_engine(
@@ -323,20 +322,21 @@ Any questions about company-related financials or other metrics should be asked 
 
     if conversation.documents:
         doc_titles = "\n".join(
-            "- " + build_title_for_document(doc) for doc in conversation.documents
+            f"- {build_title_for_document(doc)}"
+            for doc in conversation.documents
         )
     else:
         doc_titles = "No documents selected."
 
     curr_date = datetime.utcnow().strftime("%Y-%m-%d")
-    chat_engine = OpenAIAgent.from_tools(
+    return OpenAIAgent.from_tools(
         tools=top_level_sub_tools,
         llm=chat_llm,
         chat_history=chat_history,
         verbose=settings.VERBOSE,
-        system_prompt=SYSTEM_MESSAGE.format(doc_titles=doc_titles, curr_date=curr_date),
+        system_prompt=SYSTEM_MESSAGE.format(
+            doc_titles=doc_titles, curr_date=curr_date
+        ),
         callback_manager=service_context.callback_manager,
         max_function_calls=3,
     )
-
-    return chat_engine

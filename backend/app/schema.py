@@ -44,9 +44,7 @@ class Citation(BaseMetadataObject):
 
     @validator("document_id")
     def validate_document_id(cls, value):
-        if value:
-            return str(value)
-        return value
+        return str(value) if value else value
 
     @classmethod
     def from_node(cls, node_w_score: NodeWithScore) -> "Citation":

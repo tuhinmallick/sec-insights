@@ -134,15 +134,12 @@ class ConversationCmd(cmd.Cmd):
         headers = {"Accept": "text/event-stream"}
         response = sse_with_requests(url, headers)
         messages = SSEClient(response).events()
-        message_idx = 0
         final_message = None
-        for msg in messages:
+        for message_idx, msg in enumerate(messages):
             print(f"\n\n=== Message {message_idx} ===")
             msg_json = json.loads(msg.data)
             print(msg_json)
             final_message = msg_json.get("content")
-            message_idx += 1
-
         if final_message is not None:
             print(f"\n\n====== Final Message ======")
             print(final_message)

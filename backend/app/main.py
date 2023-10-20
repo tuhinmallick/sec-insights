@@ -117,7 +117,7 @@ app.mount(f"/{settings.LOADER_IO_VERIFICATION_STR}", loader_io_router)
 
 
 def start():
-    print("Running in AppEnvironment: " + settings.ENVIRONMENT.value)
+    print(f"Running in AppEnvironment: {settings.ENVIRONMENT.value}")
     __setup_logging(settings.LOG_LEVEL)
     __setup_sentry()
     """Launched with `poetry run start` at root level"""

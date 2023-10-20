@@ -27,50 +27,40 @@ from typing import List
 
 
 def describe_financials(financials: StockFinancial) -> str:
-    sentences: List[str] = []
-
     company = financials.company_name
     fiscal_year = financials.fiscal_year
     fiscal_period = financials.fiscal_period
 
-    sentences.append(
+    sentences: List[str] = [
         f"For {company} in fiscal year {fiscal_year} covering the period {fiscal_period}:"
-    )
-
-    income_statement = financials.financials.income_statement
-
-    if income_statement:
-        revenues = income_statement.revenues
-        if revenues:
+    ]
+    if income_statement := financials.financials.income_statement:
+        if revenues := income_statement.revenues:
             revenue_str = f"{revenues.label}: {revenues.value} {revenues.unit}"
             sentences.append(f"Revenues were {revenue_str}.")
 
-        expenses = income_statement.operating_expenses
-        if expenses:
+        if expenses := income_statement.operating_expenses:
             expenses_str = f"{expenses.label}: {expenses.value} {expenses.unit}"
             sentences.append(f"Operating expenses were {expenses_str}.")
 
-        gross_profit = income_statement.gross_profit
-        if gross_profit:
+        if gross_profit := income_statement.gross_profit:
             gross_profit_str = f"{gross_profit.value} {gross_profit.unit}"
             sentences.append(f"Gross profit was {gross_profit_str}.")
 
-    net_income = (
-        financials.financials.comprehensive_income.comprehensive_income_loss_attributable_to_parent
-    )
-    if net_income:
+    if (
+        net_income := financials.financials.comprehensive_income.comprehensive_income_loss_attributable_to_parent
+    ):
         net_income_str = f"{net_income.label}: {net_income.value} {net_income.unit}"
         sentences.append(f"Net income was {net_income_str}.")
 
-    cash_flows = financials.financials.cash_flow_statement
-    if cash_flows:
-        operating_cash_flows = cash_flows.net_cash_flow
-        if operating_cash_flows:
+    if cash_flows := financials.financials.cash_flow_statement:
+        if operating_cash_flows := cash_flows.net_cash_flow:
             operating_str = f"{operating_cash_flows.label}: {operating_cash_flows.value} {operating_cash_flows.unit}"
             sentences.append(f"Net cash from operating activities was {operating_str}.")
 
-        financing_cash_flows = cash_flows.net_cash_flow_from_financing_activities
-        if financing_cash_flows:
+        if (
+            financing_cash_flows := cash_flows.net_cash_flow_from_financing_activities
+        ):
             financing_str = f"{financing_cash_flows.label}: {financing_cash_flows.value} {financing_cash_flows.unit}"
             sentences.append(f"Net cash from financing activities was {financing_str}.")
 
@@ -132,7 +122,7 @@ def get_polygion_io_sec_tool(document: DocumentSchema) -> FunctionTool:
 
     def sync_func_placeholder(*args, **kwargs) -> None:
         raise NotImplementedError(
-            "Sync function was called for document_id=" + str(document.id)
+            f"Sync function was called for document_id={str(document.id)}"
         )
 
     return FunctionTool.from_defaults(
