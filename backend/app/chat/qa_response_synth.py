@@ -11,7 +11,9 @@ from llama_index.response_synthesizers.factory import get_response_synthesizer
 def get_custom_response_synth(
     service_context: ServiceContext, documents: List[DocumentSchema]
 ) -> BaseSynthesizer:
-    doc_titles = "\n".join("- " + build_title_for_document(doc) for doc in documents)
+    doc_titles = "\n".join(
+        f"- {build_title_for_document(doc)}" for doc in documents
+    )
     refine_template_str = f"""
 A user has selected a set of SEC filing documents and has asked a question about them. \
 The SEC documents have the following titles:

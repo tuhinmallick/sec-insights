@@ -76,9 +76,7 @@ async def fetch_message_with_sub_processes(
     )
     result = await db.execute(stmt)  # execute the statement
     message = result.scalars().first()  # get the first result
-    if message is not None:
-        return schema.Message.from_orm(message)
-    return None
+    return schema.Message.from_orm(message) if message is not None else None
 
 
 async def fetch_documents(

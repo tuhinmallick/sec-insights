@@ -74,7 +74,7 @@ def _convert_to_pdf(output_dir: str):
                 filing_doc = filing_dir / "primary-document.html"
                 filing_pdf = filing_dir / "primary-document.pdf"
                 if filing_doc.exists() and not filing_pdf.exists():
-                    print("- Converting {}".format(filing_doc))
+                    print(f"- Converting {filing_doc}")
                     input_path = str(filing_doc.absolute())
                     output_path = str(filing_pdf.absolute())
                     try:
@@ -92,8 +92,8 @@ def main(
     limit: Optional[int] = 3,
     convert_to_pdf: bool = True,
 ):
-    print('Downloading filings to "{}"'.format(Path(output_dir).absolute()))
-    print("File Types: {}".format(file_types))
+    print(f'Downloading filings to "{Path(output_dir).absolute()}"')
+    print(f"File Types: {file_types}")
     if convert_to_pdf:
         if find_executable("wkhtmltopdf") is None:
             raise Exception(
